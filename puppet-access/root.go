@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+//Main commmand
 var (
 	RootCmd = &cobra.Command{
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
@@ -34,6 +35,7 @@ func init() {
 
 }
 
+//Execute represents the function that executes the main command
 func Execute(version string) error {
 	RootCmd.Version = version
 	return RootCmd.Execute()
@@ -55,25 +57,25 @@ func setCmdFlags(cmd *cobra.Command) {
 	cmd.PersistentFlags().StringP(
 		"token-file",
 		"t",
-		"/root/.puppetlabs/token",
+		getDefaultTokenFile(),
 		"Location of the token file.",
 	)
 	cmd.PersistentFlags().StringP(
 		"ca-cert",
 		"",
-		"/etc/puppetlabs/puppet/ssl/certs/ca.pem",
+		getDefaultCacert(),
 		"CA cert to use to contact token-issuing service.",
 	)
 	cmd.PersistentFlags().StringP(
 		"service-url ",
 		"",
-		"",
+		"127.0.0.8080",
 		"FQDN, port, and API prefix of server where the token issuing service/server can be contacted \n(the Puppet Enterprise console node).(example: https://<HOSTNAME>:4433/rbac-api)",
 	)
 	cmd.PersistentFlags().StringP(
 		"config-file",
 		"c",
-		"/root/.puppetlabs/client-tools/puppet-access.conf",
+		getDefaultConfigFile(),
 		" Path to configuration file.",
 	)
 
@@ -121,7 +123,7 @@ func readGlobalConfigFile() error {
 	return viper.ReadInConfig()
 }
 
-func getDefaultConfig() string {
+func getDefaultConfigFile() string {
 	usr, err := user.Current()
 	if err != nil {
 		log.Error(err.Error())
@@ -135,7 +137,7 @@ func getDefaultConfig() string {
 func mergeUserConfigFile(cfgFile string) error {
 	_, err := os.Stat(cfgFile)
 	if err != nil {
-		if cfgFile == getDefaultConfig() {
+		if cfgFile == getDefaultConfigFile() {
 			log.Debug(fmt.Sprintf("Failed reading default config file: %s", err.Error()))
 			return nil
 		}
@@ -165,4 +167,24 @@ func bindConfigFlags(cmd *cobra.Command) {
 	viper.BindPFlag("puppetdb.server_urls", cmd.PersistentFlags().Lookup("service-url"))
 	viper.BindPFlag("puppetdb.cacert", cmd.PersistentFlags().Lookup("ca-cert"))
 	viper.BindPFlag("puppetdb.token-file", cmd.PersistentFlags().Lookup("token-file"))
+}
+
+func getDefaultCacert() string {
+	puppetLabsDir, err := PuppetLabsDir()
+	if err != nil {
+		log.Error(err.Error())
+		return ""
+	}
+
+	return filepath.Join(puppetLabsDir, "puppet", "ssl", "certs", "ca.pem")
+}
+
+func getDefaultTokenFile() string {
+	usr, err := user.Current()
+	if err != nil {
+		log.Error(err.Error())
+		return ""
+	}
+
+	return filepath.Join(usr.HomeDir, ".puppetlabs", "token")
 }

@@ -4,9 +4,10 @@ import (
 	"os"
 
 	"github.com/puppetlabs/pe-cli/log"
-	"github.com/puppetlabs/pe-cli/puppet-access"
+	cmd "github.com/puppetlabs/pe-cli/puppet-access"
 )
 
+//Version of command
 var Version = "0.0.0"
 
 func init() {

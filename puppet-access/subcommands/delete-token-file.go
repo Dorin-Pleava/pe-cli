@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/puppetlabs/pe-cli/puppet-access"
+	cmd "github.com/puppetlabs/pe-cli/puppet-access"
 	"github.com/spf13/cobra"
 )
 
