@@ -30,7 +30,6 @@ func init() {
 	RootCmd.Flags().BoolP("version", "V", false, "Show version.")
 
 	setCmdFlags(RootCmd)
-	registerConfigAliases()
 	bindConfigFlags(RootCmd)
 
 }
@@ -67,9 +66,9 @@ func setCmdFlags(cmd *cobra.Command) {
 		"CA cert to use to contact token-issuing service.",
 	)
 	cmd.PersistentFlags().StringP(
-		"service-url ",
+		"service-url",
 		"",
-		"127.0.0.8080",
+		"",
 		"FQDN, port, and API prefix of server where the token issuing service/server can be contacted \n(the Puppet Enterprise console node).(example: https://<HOSTNAME>:4433/rbac-api)",
 	)
 	cmd.PersistentFlags().StringP(
@@ -104,7 +103,7 @@ func getGlobalConfigFile() (string, error) {
 		return puppetLabsDir, err
 	}
 
-	globalConfigFile := filepath.Join(puppetLabsDir, "client-tools", "puppetdb.conf")
+	globalConfigFile := filepath.Join(puppetLabsDir, "client-tools", "puppet-access.conf")
 	return globalConfigFile, nil
 }
 
@@ -130,7 +129,7 @@ func getDefaultConfigFile() string {
 		return ""
 	}
 
-	configFile := filepath.Join(usr.HomeDir, ".puppetlabs", "client-tools", "puppetdb.conf")
+	configFile := filepath.Join(usr.HomeDir, ".puppetlabs", "client-tools", "puppet-access.conf")
 	return configFile
 }
 
@@ -157,16 +156,11 @@ func validateGlobalFlags(cmd *cobra.Command) error {
 
 	return nil
 }
-func registerConfigAliases() {
-	viper.RegisterAlias("service-url", "puppetdb.server_urls")
-	viper.RegisterAlias("ca-cert", "puppetdb.cacert")
-	viper.RegisterAlias("token-file", "puppetdb.token-file")
-}
 
 func bindConfigFlags(cmd *cobra.Command) {
-	viper.BindPFlag("puppetdb.server_urls", cmd.PersistentFlags().Lookup("service-url"))
-	viper.BindPFlag("puppetdb.cacert", cmd.PersistentFlags().Lookup("ca-cert"))
-	viper.BindPFlag("puppetdb.token-file", cmd.PersistentFlags().Lookup("token-file"))
+	viper.BindPFlag("service-url", cmd.PersistentFlags().Lookup("service-url"))
+	viper.BindPFlag("certificate-file", cmd.PersistentFlags().Lookup("ca-cert"))
+	viper.BindPFlag("token-file", cmd.PersistentFlags().Lookup("token-file"))
 }
 
 func getDefaultCacert() string {
