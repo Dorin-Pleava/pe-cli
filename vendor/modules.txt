@@ -23,6 +23,14 @@ github.com/mitchellh/mapstructure
 github.com/pelletier/go-toml
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
+# github.com/puppetlabs/pe-sdk-go v0.0.0-20210216145142-42bae135496e
+## explicit
+github.com/puppetlabs/pe-sdk-go/log
+github.com/puppetlabs/pe-sdk-go/log/golog
+github.com/puppetlabs/pe-sdk-go/log/loginterface
+github.com/puppetlabs/pe-sdk-go/log/loglevel
+github.com/puppetlabs/pe-sdk-go/token
+github.com/puppetlabs/pe-sdk-go/token/filetoken
 # github.com/spf13/afero v1.1.2
 github.com/spf13/afero
 github.com/spf13/afero/mem
