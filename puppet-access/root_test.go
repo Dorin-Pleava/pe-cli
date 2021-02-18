@@ -29,7 +29,8 @@ func TestCLIConfigFileAbsent(t *testing.T) {
 
 func TestCanReadAndAliasConfigParameters(t *testing.T) {
 	assert := assert.New(t)
-	initConfig(filepath.Join(testdata.FixturePath(), "puppet-access.conf"))
+	err := readConfigFile(filepath.Join(testdata.FixturePath(), "puppet-access.conf"))
+	assert.NoError(err)
 	assert.Equal("https://<CONSOLE HOSTNAME>:4433/rbac-api", viper.GetString("service-url"))
 	assert.Equal("/path/to/cacert", viper.GetString("certificate-file"))
 	assert.Equal("/path/to/token", viper.GetString("token-file"))

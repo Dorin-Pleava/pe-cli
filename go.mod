@@ -3,6 +3,7 @@ module github.com/puppetlabs/pe-cli
 go 1.15
 
 require (
+	github.com/puppetlabs/pe-sdk-go v0.0.0-20210216145142-42bae135496e
 	github.com/spf13/cobra v1.1.1
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.7.0
