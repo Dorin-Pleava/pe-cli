@@ -80,7 +80,6 @@ func setCmdFlags(cmd *cobra.Command) {
 
 }
 func initConfig(cfgFile string) {
-	viper.SetConfigType("json")
 	err := readConfigFile(cfgFile)
 	if err != nil {
 		log.Error(err.Error())
@@ -89,6 +88,7 @@ func initConfig(cfgFile string) {
 }
 
 func readConfigFile(cfgFile string) error {
+	viper.SetConfigType("json")
 	err := readGlobalConfigFile()
 	if err != nil {
 		return err
